@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rabisco Código – aprenda a desenhar programando</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ece8ff;--panel:#fff;--ink:#2b2257;--soft:#5f5894;--line:#2b2257;--accent:#ff5d8f;--sun:#ffd23f;--mint:#2fc98a;--code:#fbfaff;--codeink:#2b2257;--bad:#d6336c;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17132e;--panel:#241e47;--ink:#f1edff;--soft:#b6acf0;--line:#8f84d9;--code:#1a1536;--codeink:#f1edff;--bad:#ff8fb0}}
+:root[data-theme="dark"]{--bg:#17132e;--panel:#241e47;--ink:#f1edff;--soft:#b6acf0;--line:#8f84d9;--code:#1a1536;--codeink:#f1edff;--bad:#ff8fb0}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;font-size:18px;line-height:1.35}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+h1{margin:0;font-size:2rem;font-weight:800;letter-spacing:-.5px}
+.dots{display:flex;gap:5px}.dots i{width:18px;height:18px;border-radius:50%;border:3px solid var(--line);display:block}
+.dots i:nth-child(1){background:var(--accent)}.dots i:nth-child(2){background:var(--sun)}.dots i:nth-child(3){background:var(--mint);border-radius:4px}
+.sub{color:var(--soft);margin:0;font-size:1rem}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+nav button{font:inherit;font-weight:700;width:46px;height:46px;border-radius:50%;border:3px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+nav button.on{background:var(--sun);color:#2b2257}
+nav button.done::after{content:"★";font-size:.8rem;position:absolute;margin:-30px 0 0 24px;color:var(--accent)}
+nav button.done{position:relative;border-color:var(--mint)}
+main{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+@media(max-width:820px){main{grid-template-columns:1fr}h1{font-size:1.6rem}}
+.card{background:var(--panel);border:3px solid var(--line);border-radius:18px;padding:14px;box-shadow:5px 5px 0 var(--line)}
+.card h2{margin:0 0 4px;font-size:1.35rem}
+.card p{margin:4px 0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px}
+.chip{font:600 .8rem ui-monospace,Consolas,monospace;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:3px 10px;cursor:pointer}
+.chip:hover{background:var(--sun);color:#2b2257}
+textarea{width:100%;height:230px;resize:vertical;border:3px solid var(--line);border-radius:12px;background:var(--code);color:var(--codeink);font:600 16px/1.5 ui-monospace,Consolas,monospace;padding:10px;tab-size:2}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.btn{font:inherit;font-weight:800;border:3px solid var(--line);border-radius:14px;padding:6px 18px;cursor:pointer;background:var(--panel);color:var(--ink);box-shadow:3px 3px 0 var(--line)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--line)}
+.btn.go{background:var(--mint);color:#0d2b1f;font-size:1.15rem}
+.btn.next{background:var(--sun);color:#2b2257}
+.stage{position:relative;width:100%;max-width:440px;aspect-ratio:1;margin:0 auto;border:3px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+#grid,#ann{pointer-events:none}
+.pbar{margin:10px 0 8px;border:3px solid var(--line);border-radius:12px;padding:8px 10px;background:var(--bg);min-height:84px}
+.sig{font:700 1rem ui-monospace,Consolas,monospace}
+.sig b{font-weight:800;padding:1px 7px;border-radius:8px;color:#fff;margin:0 1px;border:3px solid transparent}
+.sig b.on{border-color:var(--ink)}
+.t-x{--c:#e0357a}.t-y{--c:#2f80ed}.t-w{--c:#1f9d55}.t-h{--c:#d9600a}.t-d{--c:#8e44ad}.t-t{--c:#6b6b80}
+.edwrap{position:relative;height:230px;border:3px solid var(--line);border-radius:12px;background:var(--code);overflow:hidden}
+.edwrap pre,.edwrap textarea{position:absolute;inset:0;margin:0;padding:10px;border:0;width:100%;height:100%;font:600 16px/1.5 ui-monospace,Consolas,monospace;tab-size:2;white-space:pre;letter-spacing:0}
+.edwrap pre{color:var(--codeink);overflow:hidden;pointer-events:none}
+.edwrap textarea{background:transparent;color:transparent;caret-color:var(--ink);resize:none;border-radius:0;overflow:auto}
+.a{box-shadow:inset 0 -3px 0 var(--c);background:color-mix(in srgb,var(--c) 24%,transparent);border-radius:3px}
+.aline{display:flex;flex-wrap:wrap;align-items:flex-end;gap:2px;font:700 1.05rem ui-monospace,Consolas,monospace;padding-top:2px}
+.col{display:inline-flex;flex-direction:column;align-items:center;min-width:2.4ch;padding:0 4px;border-radius:8px;border:3px solid transparent}
+.col.on{border-color:var(--ink)}
+.pill{background:var(--c);color:#fff;border-radius:8px;padding:0 7px;font:800 .75rem "Baloo 2",system-ui,sans-serif;white-space:nowrap}
+.val{color:var(--c);box-shadow:inset 0 -3px 0 var(--c);padding:0 2px}
+.pdesc{margin:6px 0 0;font-size:.95rem}
+.pdesc code{font-weight:700}
+.meta{display:flex;justify-content:space-between;align-items:center;max-width:440px;margin:8px auto 0;font-size:.95rem;color:var(--soft)}
+#coord{font:700 .95rem ui-monospace,Consolas,monospace;color:var(--ink)}
+#msg{max-width:440px;margin:10px auto 0;min-height:52px;border-radius:12px;padding:8px 12px;border:3px dashed var(--line)}
+#msg.ok{border-style:solid;border-color:var(--mint);background:color-mix(in srgb,var(--mint) 22%,var(--panel));animation:pop .35s}
+#msg.err{border-color:var(--bad);color:var(--bad)}
+@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){#msg.ok{animation:none}}
+label.chk{display:flex;gap:6px;align-items:center;cursor:pointer}
+:focus-visible{outline:4px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+  <h1>Rabisco Código</h1>
+  <p class="sub">Escreva comandos e veja o desenho aparecer!</p>
+</header>
+<nav id="nav" aria-label="Missões"></nav>
+<main>
+  <section class="card">
+    <h2 id="mt"></h2>
+    <p id="mx"></p>
+    <div class="chips" id="chips" aria-label="Comandos para inserir"></div>
+    <div class="pbar" id="pbar" aria-live="polite"></div>
+    <div class="edwrap"><pre id="mir" aria-hidden="true"></pre><textarea id="ed" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Seu código"></textarea></div>
+    <div class="row">
+      <button class="btn go" id="run">▶ Desenhar</button>
+      <button class="btn" id="hint">💡 Dica</button>
+      <button class="btn" id="reset">Recomeçar</button>
+    </div>
+  </section>
+  <section class="card">
+    <div class="stage"><canvas id="cv" width="800" height="800"></canvas><canvas id="grid" width="800" height="800"></canvas><canvas id="ann" width="800" height="800"></canvas></div>
+    <div class="meta">
+      <label class="chk"><input type="checkbox" id="g" checked> Mostrar grade</label>
+      <span id="coord">x: –  y: –</span>
+    </div>
+    <div id="msg" role="status" aria-live="polite">Escreva seu código e aperte “Desenhar”.</div>
+    <div class="row" style="justify-content:center"><button class="btn next" id="next" hidden>Próxima missão ›</button></div>
+  </section>
+</main>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const cv=$("cv"),ctx=cv.getContext("2d"),gc=$("grid").getContext("2d"),ed=$("ed"),msg=$("msg");
+const CORES={vermelho:"#e63946",azul:"#2f80ed",verde:"#2fb34a",amarelo:"#ffd400",laranja:"#ff8c1a",roxo:"#8e44ad",rosa:"#ff6fae",preto:"#1b1b1b",branco:"#ffffff",marrom:"#8b5a2b",cinza:"#9aa0a6",ciano:"#19c3d8"};
+const norm=s=>String(s).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+function cor(a,b,c){return b!==undefined?`rgb(${a},${b},${c})`:(CORES[norm(a)]||a)}
+
+/* grade */
+function drawGrid(){gc.clearRect(0,0,800,800);gc.save();gc.scale(2,2);gc.lineWidth=1;gc.font="bold 10px sans-serif";
+for(let i=0;i<=400;i+=50){gc.strokeStyle=i%100?"rgba(70,60,140,.18)":"rgba(70,60,140,.38)";
+gc.beginPath();gc.moveTo(i,0);gc.lineTo(i,400);gc.moveTo(0,i);gc.lineTo(400,i);gc.stroke();
+if(i&&i<400){gc.fillStyle="rgba(70,60,140,.85)";gc.fillText(i,i+2,10);gc.fillText(i,2,i-2)}}gc.restore()}
+drawGrid();
+$("g").onchange=e=>$("grid").style.display=e.target.checked?"block":"none";
+cv.parentElement.addEventListener("pointermove",e=>{const r=cv.getBoundingClientRect();
+$("coord").textContent=`x: ${Math.round((e.clientX-r.left)/r.width*400)}  y: ${Math.round((e.clientY-r.top)/r.height*400)}`});
+
+/* motor de desenho */
+let LOG=[],S;
+function reset(){ctx.setTransform(2,0,0,2,0,0);ctx.fillStyle="#fff";ctx.fillRect(0,0,400,400);
+S={fill:"#1b1b1b",stroke:null,lw:3};LOG=[]}
+function paint(t,o){if(LOG.length>3000)throw new Error("DEMAIS");LOG.push({t,fill:S.fill,...o});
+if(S.fill){ctx.fillStyle=S.fill;ctx.fill()}if(S.stroke){ctx.strokeStyle=S.stroke;ctx.lineWidth=S.lw;ctx.stroke()}}
+const API={
+ cor(a,b,c){S.fill=cor(a,b,c)},
+ semCor(){S.fill=null},
+ contorno(a,b,c){S.stroke=cor(a??"preto",b,c)},
+ semContorno(){S.stroke=null},
+ espessura(n){S.lw=n},
+ fundo(a,b,c){ctx.fillStyle=cor(a,b,c);ctx.fillRect(0,0,400,400)},
+ circulo(x,y,d){ctx.beginPath();ctx.arc(x,y,d/2,0,7);paint("circulo",{x,y})},
+ elipse(x,y,w,h){ctx.beginPath();ctx.ellipse(x,y,w/2,h/2,0,0,7);paint("elipse",{x,y})},
+ retangulo(x,y,w,h){ctx.beginPath();ctx.rect(x,y,w,h);paint("retangulo",{x,y})},
+ triangulo(a,b,c,d,e,f){ctx.beginPath();ctx.moveTo(a,b);ctx.lineTo(c,d);ctx.lineTo(e,f);ctx.closePath();paint("triangulo",{x:(a+c+e)/3,y:(b+d+f)/3})},
+ linha(a,b,c,d){const f=S.fill;ctx.beginPath();ctx.moveTo(a,b);ctx.lineTo(c,d);ctx.strokeStyle=S.stroke||S.fill||"#000";ctx.lineWidth=S.lw;ctx.stroke();LOG.push({t:"linha",fill:f})},
+ texto(s,x,y,n=24){ctx.fillStyle=S.fill||"#000";ctx.font=`800 ${n}px "Baloo 2",sans-serif`;ctx.fillText(s,x,y);LOG.push({t:"texto",fill:S.fill})}
+};
+function friendly(e){const m=String(e.message);
+if(m==="DEMAIS")return"Opa, são desenhos demais! Confira se o número de repetições não está enorme.";
+if(e instanceof ReferenceError){const n=(m.match(/^(\S+)/)||[])[1];return`Não conheço “${n}”. Será que escreveu direitinho? Letras maiúsculas e minúsculas fazem diferença.`}
+if(e instanceof SyntaxError)return"Tem algo escrito errado. Confira se todo parêntese que abriu foi fechado e se não faltou vírgula entre os números.";
+if(e instanceof TypeError)return"Algum comando está sendo usado do jeito errado. Confira os nomes e os números.";
+return"Algo deu errado: "+m}
+
+/* missões */
+const n=(L,t)=>L.filter(s=>s.t===t).length;
+const MISSOES=[
+{t:"O sol",
+ x:"Pinte com cor(\"amarelo\") e depois desenhe um círculo com circulo(x, y, tamanho). O x vai para o lado e o y vai para baixo. Faça um sol!",
+ code:"// Escolha a tinta e desenhe o sol\ncor(\"amarelo\")\n",
+ hint:"Escreva: circulo(200, 200, 120) – o círculo vai ficar no meio do papel.",
+ ok:(L,px)=>{const c=L.find(s=>s.t==="circulo");if(!c)return"Ainda não tem círculo. Use circulo(x, y, tamanho).";
+ const p=px(c.x,c.y);return p[0]>200&&p[1]>170&&p[2]<130||"Quase! Escreva cor(\"amarelo\") antes do círculo para ele ficar amarelo."}},
+{t:"A casinha",
+ x:"Desenhe uma casa: um retangulo(x, y, w, h) para as paredes (w é a largura e h é a altura) e um triangulo(x1, y1, x2, y2, x3, y3) para o telhado.",
+ code:"fundo(\"ciano\")\ncor(\"laranja\")\n// paredes\n\ncor(\"vermelho\")\n// telhado\n",
+ hint:"retangulo(120, 200, 160, 120) e triangulo(100, 200, 200, 110, 300, 200). Cada ponto do triângulo tem um x e um y.",
+ ok:L=>n(L,"retangulo")<1?"Falta o retângulo das paredes.":n(L,"triangulo")<1?"Falta o triângulo do telhado.":true},
+{t:"Uma carinha",
+ x:"Faça um rosto: um círculo grande para a cabeça, dois olhos e uma boca. Use cores diferentes para cada parte!",
+ code:"cor(\"amarelo\")\ncirculo(200, 200, 260)\n\ncor(\"preto\")\n// olhos\n\n// boca\n",
+ hint:"Olhos: circulo(150, 160, 30) e circulo(250, 160, 30). Boca: elipse(200, 260, 100, 40).",
+ ok:L=>n(L,"circulo")+n(L,"elipse")<4?"Precisa de cabeça, dois olhos e uma boca. Dá para fazer com círculos e elipses!":true},
+{t:"Variáveis",
+ x:"Uma variável guarda um valor com um nome. Mude o número de tamanho e veja tudo crescer junto. Depois acrescente um terceiro círculo usando a variável!",
+ code:"let tamanho = 80\n\ncor(\"rosa\")\ncirculo(100, 200, tamanho)\ncirculo(250, 200, tamanho)\n",
+ hint:"Acrescente uma linha: circulo(175, 100, tamanho)",
+ ok:(L)=>!/\b(let|var|const)\s+\w+/.test(ed.value)?"Crie uma variável com let nome = valor.":n(L,"circulo")<3?"Falta o terceiro círculo. Use a variável tamanho nele também!":true},
+{t:"Repetição",
+ x:"O for repete comandos sem você escrever tudo de novo. Mude o código para desenhar uma fileira com 8 círculos.",
+ code:"cor(\"roxo\")\nfor (let i = 0; i < 5; i++) {\n  circulo(50 + i * 75, 200, 60)\n}\n",
+ hint:"Troque 5 por 8. Para caber na tela, diminua o 75 para 45 e o 50 para 30.",
+ ok:L=>!/\b(for|while)\b/.test(ed.value)?"Use um for para repetir.":n(L,"circulo")<8?`Seu desenho tem ${n(L,"circulo")} círculos. Faça 8!`:true},
+{t:"Desenho livre",
+ x:"Agora é com você! Crie uma paisagem, um robô, um bicho… Use pelo menos 6 formas e 3 cores diferentes.",
+ code:"fundo(\"ciano\")\n\n",
+ hint:"Comece pelo fundo, depois chão (retângulo verde), sol, nuvens (círculos brancos) e uma árvore!",
+ ok:L=>{const f=new Set(L.map(s=>s.fill));return L.length<6?`Você tem ${L.length} formas. Faltam ${6-L.length}!`:f.size<3?"Use pelo menos 3 cores diferentes.":true}}
+];
+let cur=0,feitas=new Set();
+try{const s=JSON.parse(localStorage.getItem("rc-feitas")||"[]");if(Array.isArray(s))s.forEach(i=>feitas.add(i))}catch(e){}
+const SNIP=[["cor(\"azul\")","cor(\"azul\")"],["circulo","circulo(200, 200, 100)"],["retangulo","retangulo(100, 100, 150, 80)"],["elipse","elipse(200, 200, 140, 70)"],["triangulo","triangulo(100, 300, 200, 150, 300, 300)"],["linha","linha(50, 50, 350, 50)"],["fundo","fundo(\"ciano\")"],["texto","texto(\"Oi!\", 150, 200, 40)"],["contorno","contorno(\"preto\")"]];
+SNIP.forEach(([l,s])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.type="button";
+b.onclick=()=>{const p=ed.selectionStart,pre=ed.value.slice(0,p),lead=pre&&!pre.endsWith("\n")?"\n":"";ed.setRangeText(lead+s+"\n",p,ed.selectionEnd,"end");const c=p+lead.length+s.indexOf("(")+1;ed.focus();ed.setSelectionRange(c,c);upd()};$("chips").appendChild(b)});
+
+function setMsg(t,c){msg.textContent=t;msg.className=c||""}
+function renderNav(){const nv=$("nav");nv.innerHTML="";MISSOES.forEach((m,i)=>{const b=document.createElement("button");b.textContent=i+1;b.title=m.t;
+b.className=(i===cur?"on ":"")+(feitas.has(i)?"done":"");b.setAttribute("aria-label","Missão "+(i+1)+": "+m.t+(feitas.has(i)?" (concluída)":""));b.onclick=()=>load(i);nv.appendChild(b)})}
+function load(i){cur=i;const m=MISSOES[i];$("mt").textContent=`Missão ${i+1}: ${m.t}`;$("mx").textContent=m.x;ed.value=m.code;$("next").hidden=true;renderNav();reset();upd();setMsg("Escreva seu código e aperte “Desenhar”.")}
+function px(x,y){return ctx.getImageData(Math.round(x*2),Math.round(y*2),1,1).data}
+function run(){reset();const m=MISSOES[cur];
+try{new Function(...Object.keys(API),'"use strict";\n'+ed.value)(...Object.values(API))}
+catch(e){setMsg("Ops! "+friendly(e),"err");$("next").hidden=true;return}
+if(!LOG.length){setMsg("Nada foi desenhado ainda. Tente um comando como circulo(200, 200, 100).");return}
+const r=m.ok(LOG,px);
+if(r===true){feitas.add(cur);try{localStorage.setItem("rc-feitas",JSON.stringify([...feitas]))}catch(e){}
+renderNav();const last=cur===MISSOES.length-1;
+setMsg(last?"★ Incrível! Você completou todas as missões. Continue criando!":"★ Missão cumprida! Muito bem!","ok");$("next").hidden=last}
+else{setMsg(r);$("next").hidden=true}}
+$("run").onclick=run;
+$("hint").onclick=()=>setMsg("💡 "+MISSOES[cur].hint);
+$("reset").onclick=()=>load(cur);
+$("next").onclick=()=>load(Math.min(cur+1,MISSOES.length-1));
+ed.addEventListener("keydown",e=>{if(e.key==="Tab"){e.preventDefault();ed.setRangeText("  ",ed.selectionStart,ed.selectionEnd,"end")}
+else if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();run()}});
+/* explicação dos números: legenda colorida + medidas desenhadas no papel */
+const an=$("ann").getContext("2d");
+const SPEC={
+ circulo:{p:[["x","x"],["y","y"],["d","tamanho"]],ref:"(x, y) é o centro do círculo."},
+ elipse:{p:[["x","x"],["y","y"],["w","largura (w)"],["h","altura (h)"]],ref:"(x, y) é o centro da elipse."},
+ retangulo:{p:[["x","x"],["y","y"],["w","largura (w)"],["h","altura (h)"]],ref:"(x, y) é o canto de cima, à esquerda."},
+ triangulo:{p:[["x","x1"],["y","y1"],["x","x2"],["y","y2"],["x","x3"],["y","y3"]],ref:"Cada ponta do triângulo é um ponto (x, y)."},
+ linha:{p:[["x","x1"],["y","y1"],["x","x2"],["y","y2"]],ref:"A linha vai do ponto (x1, y1) até o ponto (x2, y2)."},
+ texto:{p:[["t","“texto”"],["x","x"],["y","y"],["d","tamanho"]],ref:"(x, y) é onde o texto começa."}
+};
+const DESC={x:"quanto andar para o lado →, contando da borda esquerda do papel.",y:"quanto descer ↓, contando do topo do papel.",w:"o tamanho de um lado ao outro, na horizontal ↔.",h:"o tamanho de cima a baixo, na vertical ↕.",d:"a medida de ponta a ponta, na horizontal ↔.",t:"as palavras que vão aparecer, entre aspas."};
+const COL={x:"#e0357a",y:"#2f80ed",w:"#1f9d55",h:"#d9600a",d:"#8e44ad",t:"#6b6b80"};
+const mir=$("mir"),esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+function parseLine(line){const m=line.match(/^(\s*)(\w+)(\s*)\(/);if(!m||!Object.hasOwn(SPEC,m[2]))return null;
+ const op=m[0].length-1,args=[];let d=0,s=op+1,q=null;
+ for(let i=op+1;i<=line.length;i++){const c=line[i];
+  if(q){if(c===q)q=null;continue}
+  if(c==='"'||c==="'"){q=c;continue}
+  if(c==="("){d++;continue}
+  if(c===")"&&d>0){d--;continue}
+  if(i===line.length||c===","||c===")"){args.push([s,i]);s=i+1;if(c!==",")break}}
+ return{cmd:m[2],op,args}}
+function hl(){mir.innerHTML=ed.value.split("\n").map(line=>{const p=parseLine(line);if(!p)return esc(line);
+  const sp=SPEC[p.cmd].p;let r="",last=0;
+  p.args.forEach(([s,e],i)=>{const t=line.slice(s,e),body=t.trim();if(!body)return;
+   const st=s+t.length-t.trimStart().length;
+   r+=esc(line.slice(last,st))+`<span class="a t-${i<sp.length?sp[i][0]:"t"}">${esc(body)}</span>`;last=st+body.length});
+  return r+esc(line.slice(last))}).join("\n")+"\n";
+ mir.scrollTop=ed.scrollTop;mir.scrollLeft=ed.scrollLeft}
+const ev=(s,v)=>{try{return Function(...Object.keys(v),'"use strict";return ('+s+')')(...Object.values(v))}catch(e){return NaN}};
+function upd(){
+ an.setTransform(2,0,0,2,0,0);an.clearRect(0,0,400,400);hl();
+ const bar=$("pbar"),v=ed.value,pos=ed.selectionStart,ls=pos?v.lastIndexOf("\n",pos-1)+1:0;
+ let le=v.indexOf("\n",ls);if(le<0)le=v.length;
+ const line=v.slice(ls,le),m=line.match(/^\s*(\w+)\s*\(/),sp=m&&Object.hasOwn(SPEC,m[1])?SPEC[m[1]]:null;
+ if(!sp){bar.innerHTML='<p class="pdesc">Clique em uma linha com um comando, como <code>retangulo(...)</code>. Eu mostro o que cada número significa e desenho as medidas no papel.</p>';return}
+ const cmd=m[1],op=line.indexOf("("),col=Math.max(pos-ls,op+1),idx=Math.min((line.slice(op+1,col).match(/,/g)||[]).length,sp.p.length-1);
+ const vars={};for(const q of v.slice(0,ls).matchAll(/(?:let|var|const)\s+(\w+)\s*=\s*(-?\d+(?:\.\d+)?)/g))vars[q[1]]=+q[2];
+ const a=line.slice(op+1).replace(/\).*$/,"").split(",").map(s=>s.trim()?ev(s,vars):NaN);
+ const [ti,li]=sp.p[idx];
+ const pl=parseLine(line),nArg=Math.max(pl.args.length,sp.p.length);let cols="";
+ for(let i=0;i<nArg;i++){const [t,l]=sp.p[i]||["t","?"],ar=pl.args[i],txt=ar?line.slice(ar[0],ar[1]).trim():"";
+  cols+=`<span class="col${i===idx?" on":""} t-${t}"><small class="pill">${l}</small><span class="val">${esc(txt)||"…"}</span></span>`+(i<nArg-1?",":"")}
+ bar.innerHTML='<div class="aline">'+cmd+'('+cols+')</div><p class="pdesc"><b>'+li+'</b>: '+DESC[ti]+'<br>'+sp.ref+'</p>';
+ const F=Number.isFinite,W=i=>i===idx?4:2;
+ const dash=(x1,y1,x2,y2,c,w)=>{an.save();an.setLineDash([6,4]);an.strokeStyle=c;an.lineWidth=w;an.beginPath();an.moveTo(x1,y1);an.lineTo(x2,y2);an.stroke();an.restore()};
+ const dot=(x,y,c)=>{an.fillStyle=c;an.strokeStyle="#fff";an.lineWidth=2;an.beginPath();an.arc(x,y,5,0,7);an.fill();an.stroke()};
+ const tag=(s,x,y,c)=>{an.font="bold 12px sans-serif";const w=an.measureText(s).width+10;x=Math.max(2,Math.min(398-w,x-w/2));y=Math.max(14,Math.min(396,y));an.fillStyle=c;an.beginPath();an.roundRect?an.roundRect(x,y-13,w,17,6):an.rect(x,y-13,w,17);an.fill();an.fillStyle="#fff";an.fillText(s,x+5,y)};
+ const span=(x1,y1,x2,y2,c,w,s,tx,ty)=>{an.strokeStyle=c;an.lineWidth=w;an.beginPath();an.moveTo(x1,y1);an.lineTo(x2,y2);an.stroke();dot(x1,y1,c);dot(x2,y2,c);tag(s,tx,ty,c)};
+ const ghost=f=>{an.save();an.setLineDash([4,4]);an.strokeStyle="rgba(40,30,90,.55)";an.lineWidth=1.5;an.beginPath();f();an.stroke();an.restore()};
+ const pt=(ix,iy)=>{const x=a[ix],y=a[iy],fx=F(x),fy=F(y);
+  if(fx){dash(x,0,x,fy?y:400,COL.x,ix===idx?4:2);tag("x = "+x,x,14,COL.x)}
+  if(fy){dash(0,y,fx?x:400,y,COL.y,iy===idx?4:2);tag("y = "+y,30,y+4,COL.y)}
+  if(fx&&fy)dot(x,y,"#222")};
+ const [x,y,p3,p4]=a;
+ if(cmd==="circulo"){pt(0,1);if(F(x)&&F(y)&&F(p3)){ghost(()=>an.arc(x,y,p3/2,0,7));span(x-p3/2,y,x+p3/2,y,COL.d,W(2),"tamanho = "+p3,x,y-8)}}
+ else if(cmd==="elipse"||cmd==="retangulo"){pt(0,1);const e=cmd==="elipse",k=F(x)&&F(y);
+  if(k&&F(p3)&&F(p4))ghost(()=>e?an.ellipse(x,y,p3/2,p4/2,0,0,7):an.rect(x,y,p3,p4));
+  if(k&&F(p3)){const x0=e?x-p3/2:x;span(x0,y,x0+p3,y,COL.w,W(2),"largura (w) = "+p3,x0+p3/2,y-8)}
+  if(k&&F(p4)){const y0=e?y-p4/2:y;span(x,y0,x,y0+p4,COL.h,W(3),"altura (h) = "+p4,x+62,y0+p4/2+4)}}
+ else if(cmd==="triangulo"||cmd==="linha"){const k=sp.p.length/2,act=idx>>1;
+  const P=[...Array(k)].map((_,i)=>[a[2*i],a[2*i+1]]),g=P.filter(([px,py])=>F(px)&&F(py));
+  if(g.length>1)ghost(()=>{g.forEach(([px,py],i)=>i?an.lineTo(px,py):an.moveTo(px,py));if(cmd==="triangulo"&&g.length===3)an.closePath()});
+  P.forEach(([px,py],i)=>{if(i===act){pt(2*i,2*i+1);if(F(px)&&F(py))tag("ponto "+(i+1),px,py+22,"#444")}else if(F(px)&&F(py)){dot(px,py,"#222");tag("("+px+", "+py+")",px,py-10,"#444")}})}
+ else if(cmd==="texto")pt(1,2);
+}
+["keyup","click","input","focus"].forEach(ev2=>ed.addEventListener(ev2,upd));
+ed.addEventListener("scroll",()=>{mir.scrollTop=ed.scrollTop;mir.scrollLeft=ed.scrollLeft});
+const first=[0,1,2,3,4,5].find(i=>!feitas.has(i));load(first===undefined?5:first);
+</script>
+</body>
+</html>
